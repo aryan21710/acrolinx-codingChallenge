@@ -22,7 +22,7 @@ import {
     filterShoppingData,
     updateShoppingDataAfterSelectFilter,
     calculateRowsPerPage,
-    findUpatedFilterBoxHeaderValues,
+    findUpatedFilterBoxHeaderValues
 } from '../../common/utils';
 import {
     shoppingTableData,
@@ -44,7 +44,6 @@ export const Home: React.FC = () => {
     const [cellValues, setCellValues] = useState<ICellValues>({
         isCellClicked: false,
         cellClicked: '',
-        cellClickedIndex: -1
     });
 
     const [isGlobalFilterOn, setIsGlobalFilterOn] = useState<boolean>(false);
@@ -78,8 +77,7 @@ export const Home: React.FC = () => {
 
     const { colName } = selectedColumnFilter;
     const { isCellClicked,
-        cellClicked,
-        cellClickedIndex } = cellValues;
+        cellClicked } = cellValues;
 
     useEffect(() => {
         if (isGlobalFilterOn && !Object.values(select).includes(cellClicked)) {
@@ -126,17 +124,13 @@ export const Home: React.FC = () => {
         }
     }, [isCellClicked]);
 
-    // useEffect(()=>{
-    //     if (Object.values(select).length > 1 && isGlobalFilterOn) {
-    //         const filteredData = updateShoppingDataAfterSelectFilter(
-    //             Object.values(select),
-    //             shoppingTableData
-    //         );
-    //             // eslint-disable-next-line no-console
-    //         console.log('filteredData', filteredData);
-
-    //     }
-    // }, [paginatedData]);
+    useEffect(()=>{
+        if (maxPages === 1) {
+            setPageIndex(maxPages);
+        } else if (pageIndex > maxPages) {
+            setPageIndex(1);
+        }
+    }, [paginatedData]);
 
     useEffect(() => {
         if (filterBoxData.length > 0) {
@@ -183,14 +177,12 @@ export const Home: React.FC = () => {
         e: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>
     ) => {
         let selectedCell: string|null = '';
-        let selectedColumnIndex : string|null = '';
         if (!isCellClicked) {
             const selectedColumnFilter = e.currentTarget.getAttribute(
                 'data-selectedcolumn'
             );
-            selectedColumnIndex = e.currentTarget.getAttribute(
-                'data-selectedcolindex'
-            );
+
+
             selectedCell = e.currentTarget.getAttribute('data-selectedcell');
             const filteredData = filterShoppingData(
                 selectedColumnFilter,
@@ -211,8 +203,9 @@ export const Home: React.FC = () => {
                 setMaxPages(Math.ceil(filteredData.length / rowsPerPage));
                 setPaginatedData([...calculateRowsPerPage(filteredData, 0)]);
             }
-            if (selectedCell && selectedCell.length > 0 && selectedColumnIndex && selectedColumnIndex.length > 0) {
-                setCellValues({ ...cellValues, cellClicked: selectedCell, cellClickedIndex: parseInt(selectedColumnIndex), isCellClicked: true,  });
+            if (selectedCell && selectedCell.length > 0) {
+                setCellValues({ ...cellValues, cellClicked: selectedCell,
+                    isCellClicked: true,  });
             }
         } else {
             setCellValues({ ...cellValues, isCellClicked: true });

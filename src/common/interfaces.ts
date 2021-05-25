@@ -7,7 +7,6 @@ export  interface IFilterBoxData {
 export interface ICellValues {
   isCellClicked: boolean,
   cellClicked: string,
-  cellClickedIndex: number
 }
 
 export interface IDistinctValue {

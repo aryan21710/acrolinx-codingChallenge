@@ -1,10 +1,9 @@
-import { rowsPerPage, shoppingTableData } from './constants';
+import { rowsPerPage } from './constants';
 import {
     IData,
     IFilterColumns,
     IExtendedData,
-    IFilterBoxData,
-    IObjectKeys
+    IFilterBoxData
 } from './interfaces';
 import _ from 'lodash';
 
@@ -56,19 +55,19 @@ export const findUpatedFilterBoxHeaderValues = (
     });
 
 export const updateShoppingDataAfterSelectFilter = (
-    selectedData: (string | number)[],
-    paginatedData: IExtendedData[]
+    filterList: (string | number)[],
+    data: IExtendedData[],
 ): IExtendedData[] => {
     let updatedData: IExtendedData[] = [];
-    for (let i = 0; i <= paginatedData.length - 1; i++) {
+    for (let i = 0; i <= data.length - 1; i++) {
         let count = 0;
-        for (const k of selectedData) {
-            if (Object.values(paginatedData[i]).includes(k)) {
+        for (const k of filterList) {
+            if (Object.values(data[i]).includes(k)) {
                 count++;
             }
         }
-        if (count === selectedData.length) {
-            updatedData = [...updatedData, paginatedData[i]];
+        if (count === filterList.length) {
+            updatedData = [...updatedData, data[i]];
         }
     }
 
@@ -101,7 +100,3 @@ export const calculateRowsPerPage = (
     return result[pageIndex] ?? original;
 };
 
-// export const calculatePageIndex = (select: IObjectKeys,
-//     filteredData:IExtendedData[]) => {
-
-//     };
