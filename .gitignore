@@ -24,3 +24,5 @@ yarn-error.log*
 package-lock*
 *spec.js.mp4
 *.png
+Cypress/plugins/*.*
+Cypress/support/*.*

@@ -15,6 +15,7 @@ import {
     ISelectColumn,
     IExtendedData,
     IObjectKeys,
+    ICellValues
 } from '../../common/interfaces';
 import {
     updateFilterBoxData,
@@ -39,8 +40,12 @@ export const Home: React.FC = () => {
         colName: '',
         colIndex: -1,
     });
-    const [isCellClicked, setIsCellClicked] = useState<boolean>(false);
-    const [cellClicked, setCellClicked] = useState<string>('');
+
+    const [cellValues, setCellValues] = useState<ICellValues>({
+        isCellClicked: false,
+        cellClicked: '',
+        cellClickedIndex: -1
+    });
 
     const [isGlobalFilterOn, setIsGlobalFilterOn] = useState<boolean>(false);
     const [pageIndex, setPageIndex] = useState<number>(1);
@@ -72,18 +77,21 @@ export const Home: React.FC = () => {
   >([]);
 
     const { colName } = selectedColumnFilter;
+    const { isCellClicked,
+        cellClicked,
+        cellClickedIndex } = cellValues;
 
     useEffect(() => {
         if (isGlobalFilterOn && !Object.values(select).includes(cellClicked)) {
             setFilterBoxHeaderData([...prevFilterBoxHeaderData]);
             setFilterBoxData([...prevFilterBoxData]);
             setSelect(prevselect);
-            setIsCellClicked(true);
+            setCellValues({ ...cellValues, isCellClicked: true });
             setOriginalData([...shoppingTableData]);
             setMaxPages(Math.ceil(prevStateData.length / rowsPerPage));
             setPaginatedData([...calculateRowsPerPage(prevStateData, 0)]);
         } else if (!isGlobalFilterOn) {
-            setIsCellClicked(false);
+            setCellValues({ ...cellValues, isCellClicked: false });
             setFilterBoxData([]);
             setSelect({});
             setPaginatedData([
@@ -120,9 +128,13 @@ export const Home: React.FC = () => {
 
     // useEffect(()=>{
     //     if (Object.values(select).length > 1 && isGlobalFilterOn) {
-    //         // eslint-disable-next-line no-console
-    //         console.log('paginatedData', Math.ceil(paginatedData.length / rowsPerPage),':',paginatedData.length);
-    //         setPageIndex(Math.ceil(paginatedData.length / rowsPerPage));
+    //         const filteredData = updateShoppingDataAfterSelectFilter(
+    //             Object.values(select),
+    //             shoppingTableData
+    //         );
+    //             // eslint-disable-next-line no-console
+    //         console.log('filteredData', filteredData);
+
     //     }
     // }, [paginatedData]);
 
@@ -170,12 +182,16 @@ export const Home: React.FC = () => {
     const onCellClickHandler = (
         e: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>
     ) => {
+        let selectedCell: string|null = '';
+        let selectedColumnIndex : string|null = '';
         if (!isCellClicked) {
             const selectedColumnFilter = e.currentTarget.getAttribute(
                 'data-selectedcolumn'
             );
-            const selectedCell = e.currentTarget.getAttribute('data-selectedcell');
-            selectedCell && setCellClicked(selectedCell);
+            selectedColumnIndex = e.currentTarget.getAttribute(
+                'data-selectedcolindex'
+            );
+            selectedCell = e.currentTarget.getAttribute('data-selectedcell');
             const filteredData = filterShoppingData(
                 selectedColumnFilter,
                 shoppingTableData,
@@ -195,8 +211,12 @@ export const Home: React.FC = () => {
                 setMaxPages(Math.ceil(filteredData.length / rowsPerPage));
                 setPaginatedData([...calculateRowsPerPage(filteredData, 0)]);
             }
+            if (selectedCell && selectedCell.length > 0 && selectedColumnIndex && selectedColumnIndex.length > 0) {
+                setCellValues({ ...cellValues, cellClicked: selectedCell, cellClickedIndex: parseInt(selectedColumnIndex), isCellClicked: true,  });
+            }
+        } else {
+            setCellValues({ ...cellValues, isCellClicked: true });
         }
-        setIsCellClicked(true);
     };
 
     const onResetGlobalFilterHandler: () => void = () =>

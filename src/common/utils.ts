@@ -1,9 +1,10 @@
-import { rowsPerPage } from './constants';
+import { rowsPerPage, shoppingTableData } from './constants';
 import {
     IData,
     IFilterColumns,
     IExtendedData,
-    IFilterBoxData
+    IFilterBoxData,
+    IObjectKeys
 } from './interfaces';
 import _ from 'lodash';
 
@@ -99,3 +100,8 @@ export const calculateRowsPerPage = (
         .map(_ => copy.splice(0, rowsPerPage));
     return result[pageIndex] ?? original;
 };
+
+// export const calculatePageIndex = (select: IObjectKeys,
+//     filteredData:IExtendedData[]) => {
+
+//     };

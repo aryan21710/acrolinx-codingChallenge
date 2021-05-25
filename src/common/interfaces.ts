@@ -3,6 +3,13 @@ export  interface IFilterBoxData {
   distinctValue: string;
 }
 
+
+export interface ICellValues {
+  isCellClicked: boolean,
+  cellClicked: string,
+  cellClickedIndex: number
+}
+
 export interface IDistinctValue {
   count: number
   distinctValue: string | number ;

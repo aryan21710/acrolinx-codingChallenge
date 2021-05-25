@@ -82,6 +82,7 @@ const Table: React.FC<IProps> = ({
                                 <td
                                     data-selectedcolumn={'orderId'}
                                     data-selectedcell={d.orderId}
+                                    data-selectedcolindex={idx}
                                     onClick={onCellClickHandler}
                                     style={isCellClicked ? disable : tData}>
                                     {d.orderId}
@@ -89,6 +90,7 @@ const Table: React.FC<IProps> = ({
                                 <td
                                     data-selectedcolumn={'onlineVendor'}
                                     data-selectedcell={d.onlineVendor}
+                                    data-selectedcolindex={idx}
                                     id={`tData-${d.onlineVendor}-${idx}`}
                                     onClick={onCellClickHandler}
                                     style={isCellClicked ? disable : tData}>
@@ -97,6 +99,7 @@ const Table: React.FC<IProps> = ({
                                 <td
                                     data-selectedcolumn={'product'}
                                     data-selectedcell={d.product}
+                                    data-selectedcolindex={idx}
                                     onClick={onCellClickHandler}
                                     style={isCellClicked ? disable : tData}>
                                     {d.product}
@@ -105,6 +108,7 @@ const Table: React.FC<IProps> = ({
                                     id={`tData-${d.category}${idx}`}
                                     data-selectedcolumn={'category'}
                                     data-selectedcell={d.category}
+                                    data-selectedcolindex={idx}
                                     onClick={onCellClickHandler}
                                     style={isCellClicked ? disable : tData}>
                                     {d.category}
@@ -113,6 +117,7 @@ const Table: React.FC<IProps> = ({
                                     data-selectedcolumn={'deliveryStatus'}
                                     data-selectedcell={d.deliveryStatus}
                                     onClick={onCellClickHandler}
+                                    data-selectedcolindex={idx}
                                     style={isCellClicked ? disable : tData}>
                                     {d.deliveryStatus}
                                 </td>
